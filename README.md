@@ -9,5 +9,6 @@ pip install -r requirements.txt
 
 # Start project
 python main.py
+
 # Hot reload for dev
 gradio main.py --demo-name=my_demo

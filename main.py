@@ -1,11 +1,8 @@
-from engine.example import example
-from engine.iou import IOUengine
-from engine.bounding_box import BoundingBox
 import gradio as gr
-
-
-bounding_box = BoundingBox()
-iou = IOUengine()
+from engine.example import example
+from engine.main_engine import MainEngine
+from engine.bounding_box_engine import BoundingBoxEngine
+from engine.iou_engine import IouEngine
 
 
 def clear_inputs_and_outputs() -> list:
@@ -23,10 +20,10 @@ def clear_inputs_and_outputs() -> list:
 def process_image(image_path):
     oem = 3
     psm = 3
-    ground_box = bounding_box.draw_boxes_from_groundtruth(image_path)
-    tess_box = bounding_box.run_tesseract(image_path, oem, psm, "eng+tha")
-    both_box = bounding_box.draw_both_boxes(image_path, oem, psm, "eng+tha")
-    matching_percentage, image_iou = iou.runiou(
+    ground_box = BoundingBoxEngine().draw_boxes_from_groundtruth(image_path)
+    tess_box = MainEngine().run_tesseract(image_path, oem, psm, "eng+tha")
+    both_box = MainEngine().draw_both_boxes(image_path, oem, psm, "eng+tha")
+    matching_percentage, image_iou = IouEngine().runiou(
         image_path, oem, psm, "eng+tha")
 
     return ground_box, tess_box, both_box, matching_percentage, image_iou
@@ -57,7 +54,7 @@ with gr.Blocks() as my_demo:
             with gr.Column():
                 matching_percentage = gr.Textbox(
                     label="Area Matching Percentage")
-                gr.Markdown(f"Tesseract output")
+                gr.Markdown(f"Tesseract outputt")
                 ground_box = gr.Image()
                 gr.Markdown(f"GroundTruth output")
                 tess_box = gr.Image()

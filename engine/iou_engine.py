@@ -1,10 +1,10 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import pytesseract
 from PIL import Image
 
+from engine.tesseract_engine import TesseractEngine
 
-class IOUengine():
+
+class IouEngine():
     def extract_boxes_tess(self, data):
         bounding_boxes = []
         for line in data.split('\n'):
@@ -49,11 +49,8 @@ class IOUengine():
 
         array_2d = [[0 for _ in range(columns)] for _ in range(rows)]
 
-        image = Image.open(image_path)
-
-        # Get bounding boxes
-        boxes_data = pytesseract.image_to_boxes(
-            image, lang=language, config=f'--oem {oem} --psm {psm}')
+        boxes_data = TesseractEngine().tesseract_bounding_box(
+            image_path, oem, psm, language)
 
         # Extract bounding boxes
         bounding_boxes = self.extract_boxes_tess(boxes_data)
