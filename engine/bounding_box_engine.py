@@ -1,5 +1,8 @@
 import cv2
 import os
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from io import BytesIO
 
 
 class BoundingBoxEngine():
@@ -15,6 +18,28 @@ class BoundingBoxEngine():
                 img_cv, (x, img_cv.shape[0] - y), (w, img_cv.shape[0] - h), (0, 255, 0), 2)
 
         return img_cv
+
+    # Input : image, boxes_data
+    # Output : return image
+    # For : draw texts bounding box from groundtruth
+    def draw_boxes_on_image(self, image_path, boxes_data, confidence_treshold):
+        # Read the image
+        image = cv2.imread(image_path)
+
+        # Iterate through each bounding box data
+        for box in boxes_data:
+            left, top, width, height, conf, text = box
+
+            if conf > confidence_treshold:
+                # Convert coordinates to integers
+                left, top, width, height = int(left), int(
+                    top), int(width), int(height)
+
+                # Draw bounding box rectangle
+                cv2.rectangle(image, (left, top), (left + width,
+                                                   top + height), (0, 255, 0), 2)
+
+        return image
 
     # Input : image file path (str), coordinates array [x, y, w, h] (int)
     # Output : return image

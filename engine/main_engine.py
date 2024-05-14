@@ -13,7 +13,8 @@ class MainEngine():
         result_image = BoundingBoxEngine().draw_tesseract_bounding_box(
             img_cv, boxes_data)
 
-        return result_image
+        tess_box_text = TesseractEngine().extract_text_tesseract(boxes_data)
+        return result_image, tess_box_text
 
     # Input : image file path (str), oem (int)(0-3), psm (int)(0-12)
     # Output : return image
@@ -27,3 +28,16 @@ class MainEngine():
             result_image, boxes_data)
 
         return result_image
+
+    def run_tesseract_con(self, image_path, oem, psm, languages, confidence_treshold):
+        data = TesseractEngine().tesseract_bounding_boxes_confidence(
+            image_path, oem, psm, languages)
+
+        bounding_box = TesseractEngine().extract_tess_data(data)
+
+        result_image = BoundingBoxEngine().draw_boxes_on_image(
+            image_path, bounding_box, confidence_treshold)
+
+        tess_con_box_text = TesseractEngine().extract_text_tesseract_data(data)
+
+        return result_image, tess_con_box_text
